@@ -3,12 +3,15 @@ from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import Student, Attendance
 from .forms import StudentForm
 
 
 
+
+@login_required
 def home(request):
 	"""Simple homepage for attendance management site."""
 	context = {
@@ -18,11 +21,13 @@ def home(request):
 	return render(request, 'home.html', context)
 
 
+@login_required
 def student_list(request):
 	students = Student.objects.all().order_by('enrollment_number')
 	return render(request, 'attendance/student_list.html', {'students': students})
 
 
+@login_required
 def create_student(request):
 	if request.method == 'POST':
 		form = StudentForm(request.POST)
@@ -34,6 +39,7 @@ def create_student(request):
 	return render(request, 'attendance/student_form.html', {'form': form, 'form_title': 'Add Student'})
 
 
+@login_required
 def edit_student(request, pk):
 	student = get_object_or_404(Student, pk=pk)
 	if request.method == 'POST':
@@ -46,6 +52,7 @@ def edit_student(request, pk):
 	return render(request, 'attendance/student_form.html', {'form': form, 'form_title': 'Edit Student'})
 
 
+@login_required
 def delete_student(request, pk):
 	student = get_object_or_404(Student, pk=pk)
 	if request.method == 'POST':
@@ -54,6 +61,7 @@ def delete_student(request, pk):
 	return render(request, 'attendance/student_confirm_delete.html', {'student': student})
 
 
+@login_required
 def mark_attendance(request):
 	today = timezone.localdate()
 	students = Student.objects.all().order_by('enrollment_number')
@@ -71,7 +79,10 @@ def mark_attendance(request):
 		'date': today
 	})
 
+# signup view removed
 
+
+@login_required
 def attendance_list(request):
 	# show today's attendance by default
 	date = request.GET.get('date')

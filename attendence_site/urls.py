@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', attendance_views.home, name='home'),
     path('attendance/', include('attendance.urls')),
+    # Django auth routes removed
 ]
