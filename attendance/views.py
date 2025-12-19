@@ -55,27 +55,21 @@ def delete_student(request, pk):
 
 
 def mark_attendance(request):
-    today = date.today()
-    students = Student.objects.all()
+	today = timezone.localdate()
+	students = Student.objects.all().order_by('enrollment_number')
 
-    if request.method == "POST":
-        present_ids = request.POST.getlist('present')
+	if request.method == 'POST':
+		present_ids = request.POST.getlist('present')
+		for s in students:
+			was_present = str(s.id) in present_ids
+			Attendance.objects.update_or_create(student=s, date=today, defaults={'present': was_present})
+		messages.success(request, 'Attendance saved successfully.')
+		return redirect('attendance:attendance_list')
 
-        Attendance.objects.filter(date=today).delete()
-
-        for s in students:
-            Attendance.objects.create(
-                student=s,
-                date=today,
-                status=str(s.id) in present_ids
-            )
-
-        return redirect('mark_attendance')
-
-    return render(request, 'attendance/mark_attendance.html', {
-        'students': students,
-        'date': today
-    })
+	return render(request, 'attendance/mark_attendance.html', {
+		'students': students,
+		'date': today
+	})
 
 
 def attendance_list(request):
