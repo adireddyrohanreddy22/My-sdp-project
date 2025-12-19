@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Mark Attendance</h2>
+
+<p>Date: {{ date }}</p>
+<p>Total students: {{ students|length }}</p>
+
+<form method="post">
+    {% csrf_token %}
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Present</th>
+            <th>Enrollment</th>
+            <th>Name</th>
+        </tr>
+
+        {% for s in students %}
+        <tr>
+            <td>
+                <input type="checkbox" name="present" value="{{ s.id }}">
+            </td>
+            <td>{{ s.enrollment_number }}</td>
+            <td>{{ s.first_name }} {{ s.last_name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <button type="submit">Save Attendance</button>
+</form>
+{% endblock %}

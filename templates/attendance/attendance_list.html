@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+{% block content %}
+<h2>Attendance for {{ date }}</h2>
+<p><a href="{% url 'attendance:student_list' %}">Students</a> | <a href="{% url 'attendance:mark_attendance' %}">Mark
+        attendance</a></p>
+<table>
+    <thead>
+        <tr>
+            <th>Enrollment</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in records %}
+        <tr>
+            <td>{{ r.student.enrollment_number }}</td>
+            <td>{{ r.student.first_name }} {{ r.student.last_name }}</td>
+            <td>{{ r.present|yesno:"Present,Absent" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No records for this date.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

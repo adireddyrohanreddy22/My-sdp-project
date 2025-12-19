@@ -1,0 +1,41 @@
+{% extends "home.html" %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="m-0">Students</h2>
+    <div>
+        <a class="btn btn-outline-secondary me-2" href="{% url 'attendance:mark_attendance' %}">Mark attendance</a>
+        <a class="btn btn-primary me-2" href="{% url 'attendance:student_add' %}">Add student</a>
+        <input type="text" id="student-search" class="form-control d-inline-block search" style="width:220px;"
+            placeholder="Search students..." aria-label="Search students">
+    </div>
+</div>
+
+<table class="table table-hover table-striped data-table fade-in">
+    <thead>
+        <tr>
+            <th>Enrollment</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ s.enrollment_number }}</td>
+            <td>{{ s.first_name }} {{ s.last_name }}</td>
+            <td>
+                <a class="btn btn-sm btn-outline-secondary me-1"
+                    href="{% url 'attendance:student_edit' s.id %}">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" data-confirm="Are you sure you want to delete this student?"
+                    href="{% url 'attendance:student_delete' s.id %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No students found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

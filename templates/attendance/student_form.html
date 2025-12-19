@@ -1,0 +1,12 @@
+{% extends "home.html" %}
+{% block content %}
+<h2>{{ form_title|default:"Add Student" }}</h2>
+<form method="post" class="card form-card">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn" href="{% url 'attendance:student_list' %}">Cancel</a>
+    </div>
+</form>
+{% endblock %}
